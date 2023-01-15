@@ -1,0 +1,6 @@
+from project's root directory 
+# CLI App
+python -m loan_manager
+
+# Test
+python -m pytest tests/
