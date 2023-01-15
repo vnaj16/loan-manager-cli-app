@@ -1,0 +1,1 @@
+"""Loan Manager CLI App entry point script."""
