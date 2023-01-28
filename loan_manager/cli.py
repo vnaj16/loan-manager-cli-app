@@ -108,6 +108,23 @@ def list_all() -> None:
         )
     typer.secho("-" * len(headers) + "\n", fg=typer.colors.BLUE)
 
+@app.command(name="pay")
+def set_paid(loan_id: int = typer.Argument(...)) -> None:
+    """Complete a loan by setting it as paid using its LOAN_ID."""
+    loan_repository = get_loan_repository()
+    loan, error = loan_repository.set_paid(loan_id)
+    if error:
+        typer.secho(
+            f'Completing loan # "{loan_id}" failed with "{ERRORS[error]}"',
+            fg=typer.colors.RED,
+        )
+        raise typer.Exit(1)
+    else:
+        typer.secho(
+            f"""Loan # {loan_id} "{loan['Description']}" paid!""",
+            fg=typer.colors.GREEN,
+        )
+
 def _version_callback(value: bool) -> None:
     if value:
         typer.echo(f"{__app_name__} v{__version__}")

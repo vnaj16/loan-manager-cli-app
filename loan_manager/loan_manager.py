@@ -3,7 +3,7 @@
 
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple
-from loan_manager import DB_READ_ERROR
+from loan_manager import DB_READ_ERROR, ID_ERROR
 
 from loan_manager.database import DatabaseHandler
 
@@ -37,18 +37,18 @@ class LoanRepository:
         read = self._db_handler.read_loans()
         return read.loan_list
 
-    # def set_done(self, todo_id: int) -> CurrentLoan:
-    #     """Set a to-do as done."""
-    #     read = self._db_handler.read_todos()
-    #     if read.error:
-    #         return CurrentTodo({}, read.error)
-    #     try:
-    #         todo = read.todo_list[todo_id - 1]
-    #     except IndexError:
-    #         return CurrentTodo({}, ID_ERROR)
-    #     todo["Done"] = True
-    #     write = self._db_handler.write_todos(read.todo_list)
-    #     return CurrentTodo(todo, write.error)
+    def set_paid(self, todo_id: int) -> CurrentLoan:
+        """Set a loan as paid."""
+        read = self._db_handler.read_loans()
+        if read.error:
+            return CurrentLoan({}, read.error)
+        try:
+            todo = read.loan_list[todo_id - 1]
+        except IndexError:
+            return CurrentLoan({}, ID_ERROR)
+        todo["Paid"] = True
+        write = self._db_handler.write_loans(read.loan_list)
+        return CurrentLoan(todo, write.error)
 
     # def remove(self, todo_id: int) -> CurrentTodo:
     #     """Remove a to-do from the database using its id or index."""
